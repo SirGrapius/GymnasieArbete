@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] public bool isMoving;
     [SerializeField] float speed = 5;
+    [SerializeField] bool sprinting;
 
     Vector2 playerInput;
 
@@ -54,6 +55,16 @@ public class PlayerMovement : MonoBehaviour
             {
                 //change animation to move upwards
             }
+        }
+
+        while (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            sprinting = true;
+        }
+
+        if (sprinting)
+        {
+            speed = speed * 1.5f;
         }
     }
     private void FixedUpdate()
