@@ -8,7 +8,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] public bool isMoving;
-    [SerializeField] float speed = 5;
+    [SerializeField] float baseSpeed = 5;
+    [SerializeField] float currentSpeed;
     [SerializeField] bool sprinting;
 
     Vector2 playerInput;
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
+        currentSpeed = baseSpeed;
     }
 
 
@@ -57,19 +59,27 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        while (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !sprinting || Input.GetKeyDown(KeyCode.RightShift) && !sprinting)
         {
             sprinting = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            sprinting = false;
         }
 
         if (sprinting)
         {
-            speed = speed * 1.5f;
+            currentSpeed = baseSpeed * 1.5f;
+        }
+        else
+        {
+            currentSpeed = baseSpeed;
         }
     }
     private void FixedUpdate()
     {
-        rb.linearVelocityX = playerInput.x * speed;
-        rb.linearVelocityY = playerInput.y * speed;
+        rb.linearVelocityX = playerInput.x * currentSpeed;
+        rb.linearVelocityY = playerInput.y * currentSpeed;
     }
 }
