@@ -59,6 +59,12 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        if (rb.linearVelocityX != 0 &&  rb.linearVelocityY != 0)
+        {
+            rb.linearVelocityX = rb.linearVelocityX * Mathf.Sqrt(2);
+            rb.linearVelocityY = rb.linearVelocityY * Mathf.Sqrt(2);
+        }
+
         if (Input.GetKeyDown(KeyCode.LeftShift) && !sprinting || Input.GetKeyDown(KeyCode.RightShift) && !sprinting)
         {
             sprinting = true;
