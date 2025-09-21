@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class CombatController : MonoBehaviour
 {
-    [SerializeField] PlayerMovement playerScript;
 
     [Header("Player Stuff")]
+    [SerializeField] PlayerMovement playerScript;
     [SerializeField] int playerHP;
+
+    [Header("Enemy Stuff")]
+    [SerializeField] EnemyHandler enemyScript;
+    [SerializeField] int enemyHP;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

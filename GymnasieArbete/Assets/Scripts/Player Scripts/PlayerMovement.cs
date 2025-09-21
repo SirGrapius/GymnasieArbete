@@ -104,6 +104,29 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocityY = playerInput.y * currentSpeed;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Bullet" && !hasiFrames)
+        {
+            BulletScript bullet = collision.gameObject.GetComponent<BulletScript>();
+            StartCoroutine(GetHit(bullet.damage, bullet.immunityDuration));
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Bullet" && hasiFrames)
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
+    public IEnumerator GetHit(int damageTaken, float iFrameDuration)
+    {
+        hitPoints -= damageTaken;
+        hasiFrames = true;
+        yield return new WaitForSeconds(iFrameDuration);
+        hasiFrames = false;
+        yield return null;
+    }
+
     public void EnterCombat()
     {
         rb = combatRigidbody;
