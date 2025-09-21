@@ -12,6 +12,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float currentSpeed;
     [SerializeField] bool sprinting;
 
+    [Header("Combat Settings")]
+    [SerializeField] int hitPoints;
+    [SerializeField] float combatSpeed;
+    [SerializeField] bool hasiFrames;
+    [SerializeField] float baseDamage;
+    [SerializeField] float damageModifier;
+
     Vector2 playerInput;
 
     [Header("Audio")]
@@ -21,10 +28,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Animator animator;
 
     [SerializeField] Rigidbody2D rb;
+    [SerializeField] Rigidbody2D mainRigidbody;
+    [SerializeField] Rigidbody2D combatRigidbody;
 
+    [SerializeField] Transform spriteTransform;
+
+    private void Awake()
+    {
+        mainRigidbody = GetComponent<Rigidbody2D>();
+    }
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = mainRigidbody;
         animator = GetComponentInChildren<Animator>();
         currentSpeed = baseSpeed;
     }
@@ -39,11 +54,11 @@ public class PlayerMovement : MonoBehaviour
             isMoving = true;
             if (playerInput.x < 0)
             {
-                rb.transform.rotation = Quaternion.Euler(0, 180, 0);
+                spriteTransform.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             if (playerInput.x > 0)
             {
-                rb.transform.rotation = Quaternion.Euler(0, 0, 0);
+                spriteTransform.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
 
@@ -61,8 +76,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (rb.linearVelocityX != 0 &&  rb.linearVelocityY != 0)
         {
-            rb.linearVelocityX = rb.linearVelocityX * Mathf.Sqrt(2);
-            rb.linearVelocityY = rb.linearVelocityY * Mathf.Sqrt(2);
+            rb.linearVelocityX = rb.linearVelocityX * Time.deltaTime / Mathf.Sqrt(2);
+            rb.linearVelocityY = rb.linearVelocityY * Time.deltaTime / Mathf.Sqrt(2);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && !sprinting || Input.GetKeyDown(KeyCode.RightShift) && !sprinting)
@@ -87,5 +102,15 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.linearVelocityX = playerInput.x * currentSpeed;
         rb.linearVelocityY = playerInput.y * currentSpeed;
+    }
+
+    public void EnterCombat()
+    {
+        rb = combatRigidbody;
+    }
+
+    public void LeaveCombat()
+    {
+        rb = mainRigidbody;
     }
 }
