@@ -1,9 +1,16 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatController : MonoBehaviour
 {
     [SerializeField] bool enemyAttacking;
+    [SerializeField] bool textOnScreen;
+
+    [Header("Text Stuff")]
+    [SerializeField] GameObject textBox;
+    [SerializeField] GameObject currentTextBox;
 
     [Header("Durations & Times")]
     [SerializeField] float attackStartUp;
@@ -11,6 +18,7 @@ public class CombatController : MonoBehaviour
     [Header("Player Stuff")]
     [SerializeField] PlayerMovement playerScript;
     [SerializeField] int playerHP;
+    [SerializeField] Button[] buttons;
 
     [Header("Enemy Stuff")]
     [SerializeField] EnemyHandler enemyScript;
@@ -26,28 +34,72 @@ public class CombatController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (textOnScreen)
+        {
+            buttons[0&1&2&3].interactable = false;
+            if (Input.anyKeyDown)
+            {
+                Destroy(currentTextBox);
+                textOnScreen = false;
+            }
+        }
+        else
+        {
+            buttons[0&1&2&3].interactable = true;
+        }
     }
 
-    void AttackButton()
+    public void AttackButton()
     {
         //first a confirm screen, then start attack minigame.
     }
 
-    void ActionButton()
+    public void ActionButton()
     {
         //brings up a list of actions, certain actions deal damage, others buff you, others increase mercy value
     }
 
-    void MercyButton()
+    public void ItemsButton()
+    {
+        //opens the players inventory allowing them to use an item to restore health or whatever
+    }
+
+    public void MercyButton()
     {
         //if mercy value is high enough spares enemy otherwise does NOTHING
         
     }
 
-    IEnumerator PlayerDoesSomething()
+    IEnumerator DoPlayerAttack()
     {
-        //check what the player is doing, attacking, acting or sparing, bring up flavour text, do the thing and finally either start the enemy's attack or end battle
+
+        yield return null;
+    }
+
+    IEnumerator DoAction()
+    {
+
+        yield return null;
+    }
+
+    IEnumerator DoItems()
+    {
+
+        yield return null;
+    }
+
+    IEnumerator DoMercy()
+    {
+
+        yield return null;
+    }
+
+    IEnumerator PlayerDoesSomething(string text, int whatButtonWasPressed)
+    {
+        currentTextBox = Instantiate(textBox, this.transform.position, Quaternion.identity);
+        TextMeshPro textField = currentTextBox.GetComponent<TextMeshPro>();
+        textField.text = text;
+
         yield return null;
     }
 

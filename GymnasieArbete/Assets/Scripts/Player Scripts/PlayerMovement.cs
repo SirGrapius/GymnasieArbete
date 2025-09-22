@@ -16,8 +16,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] int hitPoints;
     [SerializeField] float combatSpeed;
     [SerializeField] bool hasiFrames;
-    [SerializeField] float baseDamage;
-    [SerializeField] float damageModifier;
+    [SerializeField] public float baseDamage;
+    [SerializeField] public float damageModifier;
 
     Vector2 playerInput;
 
