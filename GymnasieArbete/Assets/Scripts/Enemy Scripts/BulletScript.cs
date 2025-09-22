@@ -32,19 +32,19 @@ public class BulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotateTowards(playerTransform.position);
+
     }
 
     void IsRegularBullet()
     {
         RotateTowards(playerTransform.position);
-        myRigidBody.linearVelocity = transform.up * speed;
+        myRigidBody.linearVelocity = transform.right * speed;
     }
 
     void RotateTowards(Vector2 target)
     {
         target.x = target.x - transform.position.x;
         target.y = target.y - transform.position.y;
-        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(target.x, target.y) * Mathf.Rad2Deg);
+        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg);
     }
 }
