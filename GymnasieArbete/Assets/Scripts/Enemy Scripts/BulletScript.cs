@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
@@ -12,7 +13,13 @@ public class BulletScript : MonoBehaviour
     [SerializeField] public float immunityDuration;
 
     [Header("Bullet Types")]
-    [SerializeField] bool regularBullet;
+    [SerializeField] bool autoAimBullet;
+    [SerializeField] bool verticalBullet;
+    [SerializeField] bool horizontalBullet;
+    [SerializeField] bool aoeBullet; //the big warning sign then half the arena gets nuked or whatever
+    [SerializeField] bool explodingBullet;
+    [SerializeField] bool rotatingBullet;
+    
 
     private void Awake()
     {
@@ -23,9 +30,9 @@ public class BulletScript : MonoBehaviour
 
     void Start()
     {
-        if (regularBullet)
+        if (autoAimBullet)
         {
-            IsRegularBullet();
+            IsAutoAimBullet();
         }
     }
 
@@ -35,16 +42,47 @@ public class BulletScript : MonoBehaviour
 
     }
 
-    void IsRegularBullet()
-    {
-        RotateTowards(playerTransform.position);
-        myRigidBody.linearVelocity = transform.right * speed;
-    }
-
     void RotateTowards(Vector2 target)
     {
         target.x = target.x - transform.position.x;
         target.y = target.y - transform.position.y;
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg);
+    }
+
+    IEnumerator HasStartUp(float minSpeed, float maxSpeed)
+    {
+
+        yield return null;
+    }
+
+    void IsAutoAimBullet()
+    {
+        RotateTowards(playerTransform.position);
+        myRigidBody.linearVelocity = transform.right * speed;
+    }
+
+    void IsHorizontalBullet()
+    {
+
+    }
+
+    void IsVerticalBullet()
+    {
+
+    }
+
+    void IsAoEBullet()
+    {
+
+    }
+
+    void IsExplodingBullet()
+    {
+
+    }
+
+    void IsRotatingBullet()
+    {
+
     }
 }
