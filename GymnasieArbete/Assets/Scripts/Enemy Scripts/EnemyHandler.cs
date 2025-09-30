@@ -17,7 +17,9 @@ public class EnemyHandler : MonoBehaviour
     [SerializeField] float maxAttack;
 
     [Header("Stat Settings")]
-    [SerializeField] int hitPoints;
+    [SerializeField] public int hitPoints;
+    [SerializeField] public int experienceReward;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,14 +39,14 @@ public class EnemyHandler : MonoBehaviour
     {
         int attackToDo = Mathf.RoundToInt(Random.Range(minAttack, maxAttack));
 
-        Vector3 spawnPos;
+        Vector3 spawnPos = new Vector3(0, 0, 0); //value is temporary to avoid an error, randomize later
 
         int projectileAmount;
         projectileAmount = projectileAmountPerAttack[attackToDo];
 
         for (int i = 0; i < projectileAmount; i++)
         {
-
+            Instantiate(projectiles[attackToDo], spawnPos, Quaternion.identity);
         }
         yield return null;
     }

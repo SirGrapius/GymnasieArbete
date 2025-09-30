@@ -6,18 +6,21 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] CameraFollow cameraFollow;
+
     [Header("Movement Settings")]
     [SerializeField] public bool isMoving;
-    [SerializeField] float baseSpeed = 5;
-    [SerializeField] float currentSpeed;
+    [SerializeField] public float baseSpeed = 5;
+    [SerializeField] public float currentSpeed;
     [SerializeField] bool sprinting;
 
-    [Header("Combat Settings")]
-    [SerializeField] int hitPoints;
+    [Header("Stat Settings")]
+    [SerializeField] public int hitPoints;
     [SerializeField] float combatSpeed;
     [SerializeField] bool hasiFrames;
     [SerializeField] public float baseDamage;
     [SerializeField] public float damageModifier;
+    [SerializeField] public int experience;
 
     Vector2 playerInput;
 
@@ -42,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         rb = mainRigidbody;
         animator = GetComponentInChildren<Animator>();
         currentSpeed = baseSpeed;
+        cameraFollow = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
     }
 
 
@@ -129,11 +133,13 @@ public class PlayerMovement : MonoBehaviour
 
     public void EnterCombat()
     {
+        cameraFollow.inCombat = true;
         rb = combatRigidbody;
     }
 
     public void LeaveCombat()
     {
+        cameraFollow.inCombat = false;
         rb = mainRigidbody;
     }
 }

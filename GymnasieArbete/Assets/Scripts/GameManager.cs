@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        playerScript = GetComponentInChildren<PlayerMovement>();
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
@@ -21,5 +21,16 @@ public class GameManager : MonoBehaviour
     {
         playerScript.EnterCombat();
         yield return null;
+    }
+
+    public void PlayerIsDead()
+    {
+
+        ResetToSave();
+    }
+
+    void ResetToSave()
+    {
+        
     }
 }

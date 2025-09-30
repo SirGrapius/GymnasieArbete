@@ -7,6 +7,7 @@ public class CombatController : MonoBehaviour
 {
     [SerializeField] bool enemyAttacking;
     [SerializeField] bool textOnScreen;
+    [SerializeField] GameManager gameManager;
 
     [Header("Text Stuff")]
     [SerializeField] GameObject textBox;
@@ -17,8 +18,9 @@ public class CombatController : MonoBehaviour
 
     [Header("Player Stuff")]
     [SerializeField] PlayerMovement playerScript;
-    [SerializeField] int playerHP;
     [SerializeField] Button[] buttons;
+    [SerializeField] bool buttonsInteractable;
+    [SerializeField] GameObject confirmScreen;
 
     [Header("Enemy Stuff")]
     [SerializeField] EnemyHandler enemyScript;
@@ -28,7 +30,8 @@ public class CombatController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerScript = GetComponentInChildren<PlayerMovement>();
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        gameManager = GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -36,16 +39,21 @@ public class CombatController : MonoBehaviour
     {
         if (textOnScreen)
         {
-            buttons[0&1&2&3].interactable = false;
+            buttonsInteractable = false;
             if (Input.anyKeyDown)
             {
                 Destroy(currentTextBox);
                 textOnScreen = false;
             }
         }
+
+        if (!buttonsInteractable)
+        {
+            buttons[0 & 1 & 2 & 3].interactable = false;
+        }
         else
         {
-            buttons[0&1&2&3].interactable = true;
+            buttons[0 & 1 & 2 & 3].interactable = true;
         }
     }
 
@@ -111,5 +119,18 @@ public class CombatController : MonoBehaviour
         yield return new WaitForSeconds(attackDuration);
         enemyAttacking = false;
         yield return null;
+    }
+
+    void EndCombat()
+    {
+        if (playerScript.hitPoints <= 0)
+        {
+            gameManager.PlayerIsDead();
+        }
+        if (enemyHP <= 0)
+        {
+            playerScript.experience += enemyScript.experienceReward;
+        }
+        playerScript.LeaveCombat();
     }
 }
