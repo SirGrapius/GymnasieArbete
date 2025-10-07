@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Bullet
+  - UpperSpawn
+  - LowerSpawn
+  - LeftSpawn
+  - RightSpawn
   layers:
   - Default
   - TransparentFX

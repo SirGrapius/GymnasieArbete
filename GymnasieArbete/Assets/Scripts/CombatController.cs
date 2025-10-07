@@ -16,6 +16,9 @@ public class CombatController : MonoBehaviour
     [Header("Durations & Times")]
     [SerializeField] float attackStartUp;
 
+    [Header("Dialogue")]
+    [SerializeField] TextBoxHandler dialogueScript;
+
     [Header("Player Stuff")]
     [SerializeField] PlayerMovement playerScript;
     [SerializeField] Button[] buttons;
@@ -32,6 +35,7 @@ public class CombatController : MonoBehaviour
     {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         gameManager = GetComponent<GameManager>();
+        dialogueScript.npcName = enemyScript.gameObject.name;
     }
 
     // Update is called once per frame
@@ -121,6 +125,8 @@ public class CombatController : MonoBehaviour
         yield return null;
     }
 
+
+
     void EndCombat()
     {
         if (playerScript.hitPoints <= 0)
@@ -131,6 +137,6 @@ public class CombatController : MonoBehaviour
         {
             playerScript.experience += enemyScript.experienceReward;
         }
-        playerScript.LeaveCombat();
+        StartCoroutine(playerScript.LeaveCombat());
     }
 }

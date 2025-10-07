@@ -3,26 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] CameraFollow cameraFollow;
+    [SerializeField] GameManager gameManager;
 
     [Header("Movement Settings")]
+    [SerializeField] public bool movementEnabled = true; //bool that allows the player to move
     [SerializeField] public bool isMoving;
     [SerializeField] public float baseSpeed = 5;
     [SerializeField] public float currentSpeed;
     [SerializeField] bool sprinting;
-
-    [Header("Stat Settings")]
-    [SerializeField] public int hitPoints;
-    [SerializeField] float combatSpeed;
-    [SerializeField] bool hasiFrames;
-    [SerializeField] public float baseDamage;
-    [SerializeField] public float damageModifier;
-    [SerializeField] public int experience;
-
+    [SerializeField] BoxCollider2D baseCollider; //the collider of the player's overworld object
+    [SerializeField] BoxCollider2D combatCollider; //the collider of the player's combat object
     Vector2 playerInput;
+
+    [Header("Combat Settings")]
+    [SerializeField] Vector3 originalPosition; //the player's position right before teleporting
+    [SerializeField] public GameObject arena; //the position of the arena
+    [SerializeField] public int hitPoints;
+    [SerializeField] float combatSpeed; //the player's speed when in combat
+    [SerializeField] bool hasiFrames;
+    [SerializeField] public float baseDamage; //the player's base damage with their weapon
+    [SerializeField] public float damageModifier; //a modifier applied to the player's damage based on how well they did on the attack minigame
+    [SerializeField] public int experience;
 
     [Header("Audio")]
     // audio controller script here
@@ -53,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if (playerInput.x != 0)
+        if (playerInput.x != 0 && movementEnabled) //moves the player horizontally
         {
             isMoving = true;
             if (playerInput.x < 0)
@@ -66,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (playerInput.y != 0)
+        if (playerInput.y != 0 && movementEnabled) //moves the player vertically
         {
             if (playerInput.y < 0)
             {
@@ -131,15 +137,30 @@ public class PlayerMovement : MonoBehaviour
         yield return null;
     }
 
-    public void EnterCombat()
+    public IEnumerator EnterCombat()
     {
+        originalPosition = this.transform.position; //saves position
+        StartCoroutine(gameManager.FadeOutCoroutine());
+        yield return new WaitForSeconds(gameManager.fadeDuration);
+        StartCoroutine(gameManager.FadeInCoroutine());
+        yield return new WaitForSeconds(gameManager.fadeDuration);
+        this.transform.position = arena.transform.position; //teleports player to arena
         cameraFollow.inCombat = true;
-        rb = combatRigidbody;
+        baseCollider.enabled = false;
+        combatCollider.enabled = true;
+        yield return null;
     }
 
-    public void LeaveCombat()
+    public IEnumerator LeaveCombat()
     {
+        StartCoroutine(gameManager.FadeOutCoroutine());
+        yield return new WaitForSeconds(gameManager.fadeDuration);
+        StartCoroutine(gameManager.FadeInCoroutine());
+        yield return new WaitForSeconds(gameManager.fadeDuration);
+        this.transform.position = originalPosition; //returns player to original position
         cameraFollow.inCombat = false;
-        rb = mainRigidbody;
+        baseCollider.enabled = true;
+        combatCollider.enabled = false;
+        yield return null;
     }
 }

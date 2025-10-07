@@ -20,5 +20,9 @@ public class CameraFollow : MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, playerTransform.position + zOffset, Time.deltaTime * cameraSpeed);
         }
+        if (inCombat)
+        {
+
+        }
     }
 }

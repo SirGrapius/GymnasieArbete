@@ -15,6 +15,7 @@ public class EnemyHandler : MonoBehaviour
     [SerializeField] int[] projectileAmountPerAttack;
     [SerializeField] float minAttack;
     [SerializeField] float maxAttack;
+    [SerializeField] GameObject[] spawnFields;
 
     [Header("Stat Settings")]
     [SerializeField] public int hitPoints;
@@ -33,20 +34,26 @@ public class EnemyHandler : MonoBehaviour
     {
         
     }
-    
-
     public IEnumerator AttackCorutine()
     {
-        int attackToDo = Mathf.RoundToInt(Random.Range(minAttack, maxAttack));
+        int whatAttack;
+        int spawnLane;
 
-        Vector3 spawnPos = new Vector3(0, 0, 0); //value is temporary to avoid an error, randomize later
+        Vector3[] v = new Vector3[4];
 
-        int projectileAmount;
-        projectileAmount = projectileAmountPerAttack[attackToDo];
+        whatAttack = Mathf.RoundToInt(Random.Range(minAttack, maxAttack));
 
-        for (int i = 0; i < projectileAmount; i++)
+        for (int i = 0; i < projectileAmountPerAttack[whatAttack]; i++) //spawns an amount of enemy equal to the amount of enemy points
         {
-            Instantiate(projectiles[attackToDo], spawnPos, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(1, 4));
+            spawnLane = Mathf.RoundToInt(Random.Range(0, 3)); //decides what lane the enemy will spawn on
+            BoxCollider2D laneCollider = spawnFields[spawnLane].GetComponent<BoxCollider2D>();
+            float topSide = laneCollider.size.y + spawnFields[spawnLane].transform.position.y;
+            float bottomSide = -laneCollider.size.y + spawnFields[spawnLane].transform.position.y;
+            float rightSide = laneCollider.size.x + spawnFields[spawnLane].transform.position.x;
+            float leftSide = -laneCollider.size.x + spawnFields[spawnLane].transform.position.x;
+            Vector3 spawnPos = new Vector3(Random.Range(leftSide, rightSide), Random.Range(bottomSide, topSide), 0);
+            Instantiate(projectiles[whatAttack], spawnPos, Quaternion.identity);
         }
         yield return null;
     }

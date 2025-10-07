@@ -13,6 +13,7 @@ public class TextBoxHandler : MonoBehaviour
 
     [Header("Regular Text Boxes")]
     [SerializeField] GameObject textBoxObject;
+    [SerializeField] public string npcName;
     [SerializeField] string[] texts;
     [SerializeField] int currentText;
     [SerializeField] bool textOnScreen;
@@ -29,10 +30,29 @@ public class TextBoxHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
+    void TestFunction()
+    {
+        StartNewDialogue(texts, false);
+    }
 
+    void NPCDialogues()
+    {
+        switch (npcName)
+        {
+            case "Mr_Peeks":
+                {
+                    texts[0] = "Mr. Peeks blocks your path."; //flavour text upon battle starting
+                    texts[1] = "Mr. Peeks stares with joy."; //mercy action 1 compliment
+                    texts[2] = "Mr. Peeks revels in victory."; //mercy action 2 roleplay
+                    texts[3] = "Mr. Peeks accepts the gift with glee."; //mercy action 3 gift
+
+                    break;
+                }
+        }
+    }
 
     void StartNewDialogue(string[] dialogues, bool isFlavourText)
     {
