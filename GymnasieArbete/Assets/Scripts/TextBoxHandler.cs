@@ -13,8 +13,8 @@ public class TextBoxHandler : MonoBehaviour
 
     [Header("Regular Text Boxes")]
     [SerializeField] GameObject textBoxObject;
+    [SerializeField] SpriteRenderer npcFaceRenderer;
     [SerializeField] public string npcName;
-    [SerializeField] string[] texts;
     [SerializeField] int currentText;
     [SerializeField] bool textOnScreen;
 
@@ -33,52 +33,43 @@ public class TextBoxHandler : MonoBehaviour
         
     }
 
-    void TestFunction()
+    public void StartNewDialogue(NPCScript npc)
     {
-        StartNewDialogue(texts, false);
-    }
-
-    void NPCDialogues()
-    {
-        switch (npcName)
-        {
-            case "Mr_Peeks":
-                {
-                    texts[0] = "Mr. Peeks blocks your path."; //flavour text upon battle starting
-                    texts[1] = "Mr. Peeks stares with joy."; //mercy action 1 compliment
-                    texts[2] = "Mr. Peeks revels in victory."; //mercy action 2 roleplay
-                    texts[3] = "Mr. Peeks accepts the gift with glee."; //mercy action 3 gift
-
-                    break;
-                }
-        }
-    }
-
-    void StartNewDialogue(string[] dialogues, bool isFlavourText)
-    {
-        if (isFlavourText)
-        {
-            player.currentSpeed = 0;
-        }
+        player.currentSpeed = 0;
         currentText = 0;
-        Instantiate(textBoxObject, spawnPos.position, Quaternion.identity);
-        StartCoroutine(DialogueCoroutine(1));
+        Instantiate(textBoxObject, spawnPos);
+        StartCoroutine(DialogueCoroutine(1, npc));
     }
 
-    IEnumerator DialogueCoroutine(float loadingTime)
+    void SetFaceSprite(NPCScript npc)
     {
+        npcFaceRenderer = textBoxObject.GetComponentInChildren<SpriteRenderer>();
+        if (npc.npcFaceSprite == null)
+        {
+            npcFaceRenderer.color = new Color(0, 0, 0, 0);
+        }
+        else
+        {
+            npcFaceRenderer.sprite = npc.npcFaceSprite;
+            npcFaceRenderer.color = Color.white;
+        }
+    }
+
+    IEnumerator DialogueCoroutine(float loadingTime, NPCScript npc)
+    {
+        SetFaceSprite(npc);
         bool loadingText = false;
-        for (int i = 0; i <= texts.Length;)
+        for (int i = 0; i <= npc.dialogues.Length;)
         {
             Text textBoxText = textBoxObject.GetComponent<Text>();
-            textBoxText.text = texts[i];
+            textBoxText.text = npc.dialogues[i];
             if (Input.anyKeyDown && !loadingText)
             {
                 i++;
                 loadingText = true;
                 yield return new WaitForSeconds(loadingTime);
                 loadingText = false;
-                if (i == texts.Length)
+                if (i == npc.dialogues.Length)
                 {
                     i++;
                     Destroy(textBoxObject);

@@ -20,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] BoxCollider2D combatCollider; //the collider of the player's combat object
     Vector2 playerInput;
 
+    [Header("Dialogue Settings")]
+    [SerializeField] TextBoxHandler dialogueScript;
+    [SerializeField] public NPCScript currentNPC;
+
     [Header("Combat Settings")]
     [SerializeField] Vector3 originalPosition; //the player's position right before teleporting
     [SerializeField] public GameObject arena; //the position of the arena
@@ -82,6 +86,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 //change animation to move upwards
             }
+        }
+
+        if (Input.GetKey(KeyCode.Z) && currentNPC != null) //interact with NPC
+        {
+            dialogueScript.StartNewDialogue(currentNPC);
         }
 
         if (rb.linearVelocityX != 0 &&  rb.linearVelocityY != 0)
