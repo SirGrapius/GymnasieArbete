@@ -9,6 +9,7 @@ TagManager:
   - LowerSpawn
   - LeftSpawn
   - RightSpawn
+  - TextBox
   layers:
   - Default
   - TransparentFX

@@ -273,15 +273,11 @@ MonoBehaviour:
   player: {fileID: 1330118765}
   combatController: {fileID: 405635679}
   spawnPos: {fileID: 1835549817}
-  npc: {fileID: 0}
-  currentTextBox: {fileID: 0}
   textBoxObject: {fileID: 6556794214477202819, guid: 1ff77715e5e7df54abf843b1bd1c004e, type: 3}
   npcFaceRenderer: {fileID: 0}
   npcName: 
   currentText: 0
   textOnScreen: 0
-  loadingTime: 0
-  loadingText: 0
   confirmScreen: {fileID: 0}
 --- !u!114 &405635679 stripped
 MonoBehaviour:
@@ -818,9 +814,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCScript
   dialogues:
-  - fuck off
-  - kys
-  - SLAG!!!
+  - hi
+  - hello
+  - haaaai
   actResponse: []
   flavorText: 
   npcFaceSprite: {fileID: 0}

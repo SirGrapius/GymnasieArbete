@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Dialogue Settings")]
     [SerializeField] TextBoxHandler dialogueScript;
     [SerializeField] public NPCScript currentNPC;
+    [SerializeField] public bool inDialogue;
 
     [Header("Combat Settings")]
     [SerializeField] Vector3 originalPosition; //the player's position right before teleporting
@@ -61,9 +62,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (movementEnabled)
+        {
+            playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
 
-        if (playerInput.x != 0 && movementEnabled) //moves the player horizontally
+        if (playerInput.x != 0) //moves the player horizontally
         {
             isMoving = true;
             if (playerInput.x < 0)
@@ -76,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (playerInput.y != 0 && movementEnabled) //moves the player vertically
+        if (playerInput.y != 0) //moves the player vertically
         {
             if (playerInput.y < 0)
             {
@@ -88,9 +92,11 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.Z) && currentNPC != null) //interact with NPC
+        if (Input.GetKeyDown(KeyCode.Z) && currentNPC != null && !inDialogue) //interact with NPC
         {
             dialogueScript.StartNewDialogue(currentNPC);
+            inDialogue = true;
+            movementEnabled = false;
         }
 
         if (rb.linearVelocityX != 0 &&  rb.linearVelocityY != 0)

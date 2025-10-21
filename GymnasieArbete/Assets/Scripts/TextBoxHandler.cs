@@ -10,6 +10,8 @@ public class TextBoxHandler : MonoBehaviour
     [SerializeField] PlayerMovement player;
     [SerializeField] CombatController combatController;
     [SerializeField] Transform spawnPos;
+    [SerializeField] NPCScript npc;
+    [SerializeField] GameObject currentTextBox;
 
     [Header("Regular Text Boxes")]
     [SerializeField] GameObject textBoxObject;
@@ -17,6 +19,8 @@ public class TextBoxHandler : MonoBehaviour
     [SerializeField] public string npcName;
     [SerializeField] int currentText;
     [SerializeField] bool textOnScreen;
+    [SerializeField] float loadingTime;
+    [SerializeField] bool loadingText;
 
     [Header("Confirm Screen")]
     [SerializeField] GameObject confirmScreen;
@@ -30,15 +34,29 @@ public class TextBoxHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (textOnScreen)
+        {
+            TextMeshProUGUI myText = currentTextBox.GetComponent<TextMeshProUGUI>();
+            myText.text = npc.dialogues[currentText];
+            if (Input.GetKeyDown(KeyCode.Z) && currentText < npc.dialogues.Length - 1 && !loadingText)
+            {
+                StartCoroutine(LoadTextCoroutine());
+                currentText++;
+            }
+            else if (Input.GetKeyDown(KeyCode.Z) && currentText == npc.dialogues.Length - 1)
+            {
+                StartCoroutine(EndDialogue(currentTextBox));
+            }
+        }
     }
 
-    public void StartNewDialogue(NPCScript npc)
+    public void StartNewDialogue(NPCScript npcInteracted)
     {
+        npc = npcInteracted;
         player.currentSpeed = 0;
         currentText = 0;
-        Instantiate(textBoxObject, spawnPos);
-        StartCoroutine(DialogueCoroutine(1, npc));
+        currentTextBox = Instantiate(textBoxObject, spawnPos);
+        textOnScreen = true;
     }
 
     void SetFaceSprite(NPCScript npc)
@@ -55,28 +73,24 @@ public class TextBoxHandler : MonoBehaviour
         }
     }
 
-    IEnumerator DialogueCoroutine(float loadingTime, NPCScript npc)
+    IEnumerator LoadTextCoroutine()
     {
-        SetFaceSprite(npc);
-        bool loadingText = false;
-        for (int i = 0; i <= npc.dialogues.Length;)
-        {
-            Text textBoxText = textBoxObject.GetComponent<Text>();
-            textBoxText.text = npc.dialogues[i];
-            if (Input.anyKeyDown && !loadingText)
-            {
-                i++;
-                loadingText = true;
-                yield return new WaitForSeconds(loadingTime);
-                loadingText = false;
-                if (i == npc.dialogues.Length)
-                {
-                    i++;
-                    Destroy(textBoxObject);
-                    player.currentSpeed = player.baseSpeed;
-                }
-            }
-        }
+        loadingText = true;
+        yield return new WaitForSeconds(loadingTime);
+        loadingText = false;
+        yield return null;
+    }
+
+    IEnumerator EndDialogue(GameObject boxToDestroy)
+    {
+        GameObject currentTextBox = GameObject.FindGameObjectWithTag("TextBox");
+        Destroy(currentTextBox);
+        currentTextBox = null;
+        currentText = 0;
+        textOnScreen = false;
+        yield return new WaitForSeconds(0.5f);
+        player.inDialogue = false;
+        player.movementEnabled = true;
         yield return null;
     }
 
