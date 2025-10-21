@@ -19,7 +19,7 @@ public class NPCScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if ( collision.gameObject.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             PlayerMovement player = collision.GetComponent<PlayerMovement>();
             player.currentNPC = this;
@@ -28,7 +28,7 @@ public class NPCScript : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if ( collision.gameObject.tag == "Player")
+        if (collision.CompareTag("Player"))
         {
             PlayerMovement player = collision.GetComponent<PlayerMovement>();
             player.currentNPC = null;

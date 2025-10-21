@@ -131,13 +131,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Bullet" && !hasiFrames)
+        if (collision.CompareTag("Bullet") && !hasiFrames)
         {
             BulletScript bullet = collision.gameObject.GetComponent<BulletScript>();
             StartCoroutine(GetHit(bullet.damage, bullet.immunityDuration));
             Destroy(collision.gameObject);
         }
-        else if (collision.gameObject.tag == "Bullet" && hasiFrames)
+        else if (collision.CompareTag("Bullet") && hasiFrames)
         {
             Destroy(collision.gameObject);
         }
