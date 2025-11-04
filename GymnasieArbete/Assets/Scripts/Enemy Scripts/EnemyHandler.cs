@@ -13,8 +13,8 @@ public class EnemyHandler : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] GameObject[] projectiles;
     [SerializeField] int[] projectileAmountPerAttack;
-    [SerializeField] float minAttack;
-    [SerializeField] float maxAttack;
+    [SerializeField] int minAttack;
+    [SerializeField] int maxAttack;
     [SerializeField] GameObject[] spawnFields;
 
     [Header("Stat Settings")]
@@ -26,7 +26,7 @@ public class EnemyHandler : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        maxAttack = projectiles.Length - 1;
     }
 
     // Update is called once per frame
@@ -34,7 +34,7 @@ public class EnemyHandler : MonoBehaviour
     {
         
     }
-    public IEnumerator AttackCorutine()
+    public IEnumerator AttackCorutine(float duration)
     {
         int whatAttack;
         int spawnLane;
@@ -54,7 +54,13 @@ public class EnemyHandler : MonoBehaviour
             float leftSide = -laneCollider.size.x + spawnFields[spawnLane].transform.position.x;
             Vector3 spawnPos = new Vector3(Random.Range(leftSide, rightSide), Random.Range(bottomSide, topSide), 0);
             Instantiate(projectiles[whatAttack], spawnPos, Quaternion.identity);
+            yield return new WaitForSeconds((duration - 5) / projectileAmountPerAttack[whatAttack]);
         }
         yield return null;
+    }
+
+    public void TakeDamage(int damageTaken)
+    {
+        hitPoints -= damageTaken;
     }
 }

@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float combatSpeed; //the player's speed when in combat
     [SerializeField] bool hasiFrames;
     [SerializeField] public float baseDamage; //the player's base damage with their weapon
-    [SerializeField] public float damageModifier; //a modifier applied to the player's damage based on how well they did on the attack minigame
+    [SerializeField] public float damageModifier; //a weapons base damage modifier, basically just allows certain weapons to get better multipliers
     [SerializeField] public int experience;
 
     [Header("Audio")]

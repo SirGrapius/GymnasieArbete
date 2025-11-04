@@ -10,6 +10,7 @@ TagManager:
   - LeftSpawn
   - RightSpawn
   - TextBox
+  - Enemy
   layers:
   - Default
   - TransparentFX

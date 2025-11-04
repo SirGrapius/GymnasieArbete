@@ -25,9 +25,17 @@ public class CombatController : MonoBehaviour
     [SerializeField] bool buttonsInteractable;
     [SerializeField] GameObject confirmScreen;
 
+    [Header("Player Attack")]
+    [SerializeField] GameObject minigameSpawn;
+    [SerializeField] GameObject minigameObject;
+    [SerializeField] GameObject marker;
+    [SerializeField] float startTime; //the time at which the attack minigame begins
+    [SerializeField] float inputTime; //the time at which the player presses the button to finish the minigame
+    [SerializeField] float correctTime; //the time at which ending the minigame will result in the most damage
+    [SerializeField] Slider minigameSlider;
+
     [Header("Enemy Stuff")]
     [SerializeField] EnemyHandler enemyScript;
-    [SerializeField] int enemyHP;
     [SerializeField] float mercyValue;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -41,6 +49,7 @@ public class CombatController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (textOnScreen)
         {
             buttonsInteractable = false;
@@ -59,10 +68,25 @@ public class CombatController : MonoBehaviour
         {
             buttons[0 & 1 & 2 & 3].interactable = true;
         }
+
+        if (enemyScript.hitPoints <= 0)
+        {
+            WinCombat();
+        }
+        if (playerScript.hitPoints <= 0)
+        {
+            LoseCombat();
+        }
+    }
+
+    public void StartCombat()
+    {
+        //enemyScript == GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyHandler>();
     }
 
     public void AttackButton()
     {
+        StartCoroutine(DoPlayerAttack());
         //first a confirm screen, then start attack minigame.
     }
 
@@ -84,7 +108,45 @@ public class CombatController : MonoBehaviour
 
     IEnumerator DoPlayerAttack()
     {
+        buttonsInteractable = false;
+        bool pressed = false;
+        float currentTime = 0;
+        float difference;
+        float modifier;
+        GameObject myMarker;
+        GameObject myMinigame;
 
+        myMinigame = Instantiate(minigameObject, minigameSpawn.transform);
+        minigameSlider = myMinigame.GetComponent<Slider>();
+
+        correctTime = Random.Range(minigameSlider.minValue, minigameSlider.maxValue);
+        minigameSlider.value = correctTime;
+        myMarker = Instantiate(marker, minigameSlider.handleRect.position, Quaternion.identity);
+        minigameSlider.value = 0;
+
+        if (minigameSlider.value < minigameSlider.maxValue)
+        {
+            minigameSlider.value = minigameSlider.value + Time.deltaTime;
+            currentTime = minigameSlider.value;
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            inputTime = startTime - currentTime;
+            minigameSlider.value = 0;
+            Destroy(myMarker);
+        }
+
+        yield return new WaitForSeconds(minigameSlider.maxValue + 0.25f);
+
+        if (myMarker != null)
+        {
+            inputTime = 100;
+            Destroy(myMarker);
+        }
+        difference = Mathf.Abs(correctTime - inputTime);
+        modifier = difference * playerScript.damageModifier;
+        enemyScript.hitPoints -= Mathf.RoundToInt(playerScript.baseDamage * modifier);
+        StartCoroutine(EnemyAttackHandler(5));
         yield return null;
     }
 
@@ -119,7 +181,7 @@ public class CombatController : MonoBehaviour
     {
         enemyAttacking = true;
         yield return new WaitForSeconds(attackStartUp);
-        StartCoroutine(enemyScript.AttackCorutine());
+        StartCoroutine(enemyScript.AttackCorutine(20));
         yield return new WaitForSeconds(attackDuration);
         enemyAttacking = false;
         yield return null;
@@ -127,16 +189,16 @@ public class CombatController : MonoBehaviour
 
 
 
-    void EndCombat()
+    void WinCombat()
     {
-        if (playerScript.hitPoints <= 0)
-        {
-            gameManager.PlayerIsDead();
-        }
-        if (enemyHP <= 0)
-        {
-            playerScript.experience += enemyScript.experienceReward;
-        }
+        playerScript.experience += enemyScript.experienceReward;
+        StartCoroutine(playerScript.LeaveCombat());
+    }
+
+    void LoseCombat()
+    {
+
+        gameManager.PlayerIsDead();
         StartCoroutine(playerScript.LeaveCombat());
     }
 }
