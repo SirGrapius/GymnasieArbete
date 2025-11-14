@@ -12,9 +12,10 @@ public class EnemyHandler : MonoBehaviour
 
     [Header("Attack Settings")]
     [SerializeField] GameObject[] projectiles;
+    [SerializeField] public float[] attackDurations; //number in list should match projectiles list
     [SerializeField] int[] projectileAmountPerAttack;
-    [SerializeField] int minAttack;
-    [SerializeField] int maxAttack;
+    [SerializeField] public int minAttack;
+    [SerializeField] public int maxAttack;
     [SerializeField] GameObject[] spawnFields;
 
     [Header("Stat Settings")]
@@ -34,18 +35,14 @@ public class EnemyHandler : MonoBehaviour
     {
         
     }
-    public IEnumerator AttackCorutine(float duration)
+    public IEnumerator AttackCorutine(int whatAttack)
     {
-        int whatAttack;
         int spawnLane;
 
         Vector3[] v = new Vector3[4];
 
-        whatAttack = Mathf.RoundToInt(Random.Range(minAttack, maxAttack));
-
         for (int i = 0; i < projectileAmountPerAttack[whatAttack]; i++) //spawns an amount of enemy equal to the amount of enemy points
         {
-            yield return new WaitForSeconds(Random.Range(1, 4));
             spawnLane = Mathf.RoundToInt(Random.Range(0, 3)); //decides what lane the enemy will spawn on
             BoxCollider2D laneCollider = spawnFields[spawnLane].GetComponent<BoxCollider2D>();
             float topSide = laneCollider.size.y + spawnFields[spawnLane].transform.position.y;
@@ -54,7 +51,7 @@ public class EnemyHandler : MonoBehaviour
             float leftSide = -laneCollider.size.x + spawnFields[spawnLane].transform.position.x;
             Vector3 spawnPos = new Vector3(Random.Range(leftSide, rightSide), Random.Range(bottomSide, topSide), 0);
             Instantiate(projectiles[whatAttack], spawnPos, Quaternion.identity);
-            yield return new WaitForSeconds((duration - 5) / projectileAmountPerAttack[whatAttack]);
+            yield return new WaitForSeconds((attackDurations[whatAttack]) / projectileAmountPerAttack[whatAttack]);
         }
         yield return null;
     }

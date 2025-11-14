@@ -10,6 +10,7 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         zOffset = transform.position - playerTransform.position;
         inCombat = false;
     }

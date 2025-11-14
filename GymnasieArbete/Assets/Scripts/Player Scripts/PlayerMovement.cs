@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] CameraFollow cameraFollow;
     [SerializeField] GameManager gameManager;
+    [SerializeField] CombatController combatManager;
 
     [Header("Movement Settings")]
     [SerializeField] public bool movementEnabled = true; //bool that allows the player to move
@@ -16,8 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float baseSpeed = 5;
     [SerializeField] public float currentSpeed;
     [SerializeField] bool sprinting;
-    [SerializeField] BoxCollider2D baseCollider; //the collider of the player's overworld object
-    [SerializeField] BoxCollider2D combatCollider; //the collider of the player's combat object
+    [SerializeField] BoxCollider2D baseCollider; //the collider
     Vector2 playerInput;
 
     [Header("Dialogue Settings")]
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Combat Settings")]
     [SerializeField] Vector3 originalPosition; //the player's position right before teleporting
     [SerializeField] public GameObject arena; //the position of the arena
+    [SerializeField] public int maxHitPoints;
     [SerializeField] public int hitPoints;
     [SerializeField] float combatSpeed; //the player's speed when in combat
     [SerializeField] bool hasiFrames;
@@ -42,21 +44,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Animator animator;
 
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] Rigidbody2D mainRigidbody;
-    [SerializeField] Rigidbody2D combatRigidbody;
 
-    [SerializeField] Transform spriteTransform;
+    [SerializeField] GameObject spriteObject;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Sprite[] sprites; //0 = overworld, 1 = combat
 
     private void Awake()
     {
-        mainRigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        baseCollider = GetComponent<BoxCollider2D>();
     }
     void Start()
     {
-        rb = mainRigidbody;
         animator = GetComponentInChildren<Animator>();
         currentSpeed = baseSpeed;
         cameraFollow = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
+        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+        combatManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<CombatController>();
+        spriteRenderer = spriteObject.GetComponent<SpriteRenderer>();
     }
 
 
@@ -72,11 +77,11 @@ public class PlayerMovement : MonoBehaviour
             isMoving = true;
             if (playerInput.x < 0)
             {
-                spriteTransform.transform.rotation = Quaternion.Euler(0, 180, 0);
+                spriteObject.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             if (playerInput.x > 0)
             {
-                spriteTransform.transform.rotation = Quaternion.Euler(0, 0, 0);
+                spriteObject.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
 
@@ -154,15 +159,18 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator EnterCombat()
     {
+        Debug.Log("combat starting");
         originalPosition = this.transform.position; //saves position
         StartCoroutine(gameManager.FadeOutCoroutine());
         yield return new WaitForSeconds(gameManager.fadeDuration);
+        spriteRenderer.sprite = sprites[1];
+        this.baseCollider.size = new Vector2(0.5f, 0.5f);
         StartCoroutine(gameManager.FadeInCoroutine());
         yield return new WaitForSeconds(gameManager.fadeDuration);
         this.transform.position = arena.transform.position; //teleports player to arena
         cameraFollow.inCombat = true;
-        baseCollider.enabled = false;
-        combatCollider.enabled = true;
+        combatManager.StartCombat();
+        Debug.Log("combat started");
         yield return null;
     }
 
@@ -170,12 +178,12 @@ public class PlayerMovement : MonoBehaviour
     {
         StartCoroutine(gameManager.FadeOutCoroutine());
         yield return new WaitForSeconds(gameManager.fadeDuration);
+        spriteRenderer.sprite = sprites[0];
+        this.baseCollider.size = new Vector2(1f, 1f);
         StartCoroutine(gameManager.FadeInCoroutine());
         yield return new WaitForSeconds(gameManager.fadeDuration);
         this.transform.position = originalPosition; //returns player to original position
         cameraFollow.inCombat = false;
-        baseCollider.enabled = true;
-        combatCollider.enabled = false;
         yield return null;
     }
 }

@@ -108,9 +108,9 @@ MonoBehaviour:
   myRigidBody: {fileID: 0}
   playerTransform: {fileID: 0}
   speed: 5
-  damage: 0
-  immunityDuration: 0
-  autoAimBullet: 0
+  damage: 1
+  immunityDuration: 0.15
+  autoAimBullet: 1
   verticalBullet: 0
   horizontalBullet: 0
   aoeBullet: 0

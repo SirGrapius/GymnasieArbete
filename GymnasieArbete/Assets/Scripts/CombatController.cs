@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,7 @@ public class CombatController : MonoBehaviour
     [SerializeField] GameObject currentTextBox;
 
     [Header("Durations & Times")]
-    [SerializeField] float attackStartUp;
+    [SerializeField] float attackStartUp; //enemy attack start up time
 
     [Header("Dialogue")]
     [SerializeField] TextBoxHandler dialogueScript;
@@ -24,15 +25,15 @@ public class CombatController : MonoBehaviour
     [SerializeField] Button[] buttons;
     [SerializeField] bool buttonsInteractable;
     [SerializeField] GameObject confirmScreen;
+    [SerializeField] Slider healthBar;
+    [SerializeField] TextMeshProUGUI healthText;
+    string hpInText;
 
     [Header("Player Attack")]
-    [SerializeField] GameObject minigameSpawn;
-    [SerializeField] GameObject minigameObject;
-    [SerializeField] GameObject marker;
-    [SerializeField] float startTime; //the time at which the attack minigame begins
-    [SerializeField] float inputTime; //the time at which the player presses the button to finish the minigame
-    [SerializeField] float correctTime; //the time at which ending the minigame will result in the most damage
-    [SerializeField] Slider minigameSlider;
+    [SerializeField] GameObject minigameSpawn; //spawn pos for attack minigame
+    [SerializeField] GameObject minigameObject; //attack minigame
+    [SerializeField] GameObject marker; //marker showing when to click
+    [SerializeField] Slider minigameSlider; //attack minigame slider
 
     [Header("Enemy Stuff")]
     [SerializeField] EnemyHandler enemyScript;
@@ -44,6 +45,7 @@ public class CombatController : MonoBehaviour
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         gameManager = GetComponent<GameManager>();
         dialogueScript.npcName = enemyScript.gameObject.name;
+        healthBar.maxValue = playerScript.maxHitPoints;
     }
 
     // Update is called once per frame
@@ -59,7 +61,6 @@ public class CombatController : MonoBehaviour
                 textOnScreen = false;
             }
         }
-
         if (!buttonsInteractable)
         {
             buttons[0 & 1 & 2 & 3].interactable = false;
@@ -77,11 +78,14 @@ public class CombatController : MonoBehaviour
         {
             LoseCombat();
         }
+        healthBar.value = playerScript.hitPoints;
+        healthText.text = healthBar.value.ToString();
     }
 
     public void StartCombat()
     {
-        //enemyScript == GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyHandler>();
+        enemyScript = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyHandler>();
+        StartTurn();
     }
 
     public void AttackButton()
@@ -109,62 +113,32 @@ public class CombatController : MonoBehaviour
     IEnumerator DoPlayerAttack()
     {
         buttonsInteractable = false;
-        bool pressed = false;
-        float currentTime = 0;
-        float difference;
-        float modifier;
-        GameObject myMarker;
         GameObject myMinigame;
 
         myMinigame = Instantiate(minigameObject, minigameSpawn.transform);
         minigameSlider = myMinigame.GetComponent<Slider>();
 
-        correctTime = Random.Range(minigameSlider.minValue, minigameSlider.maxValue);
-        minigameSlider.value = correctTime;
-        myMarker = Instantiate(marker, minigameSlider.handleRect.position, Quaternion.identity);
-        minigameSlider.value = 0;
-
-        if (minigameSlider.value < minigameSlider.maxValue)
-        {
-            minigameSlider.value = minigameSlider.value + Time.deltaTime;
-            currentTime = minigameSlider.value;
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            inputTime = startTime - currentTime;
-            minigameSlider.value = 0;
-            Destroy(myMarker);
-        }
-
-        yield return new WaitForSeconds(minigameSlider.maxValue + 0.25f);
-
-        if (myMarker != null)
-        {
-            inputTime = 100;
-            Destroy(myMarker);
-        }
-        difference = Mathf.Abs(correctTime - inputTime);
-        modifier = difference * playerScript.damageModifier;
-        enemyScript.hitPoints -= Mathf.RoundToInt(playerScript.baseDamage * modifier);
-        StartCoroutine(EnemyAttackHandler(5));
         yield return null;
     }
 
     IEnumerator DoAction()
     {
 
+        EndTurn();
         yield return null;
     }
 
     IEnumerator DoItems()
     {
 
+        EndTurn();
         yield return null;
     }
 
     IEnumerator DoMercy()
     {
 
+        EndTurn();
         yield return null;
     }
 
@@ -177,17 +151,42 @@ public class CombatController : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator EnemyAttackHandler(float attackDuration)
+    public IEnumerator EnemyAttackHandler()
     {
+        int whatAttack = Mathf.RoundToInt(Random.Range(enemyScript.minAttack, enemyScript.maxAttack));
         enemyAttacking = true;
         yield return new WaitForSeconds(attackStartUp);
-        StartCoroutine(enemyScript.AttackCorutine(20));
-        yield return new WaitForSeconds(attackDuration);
+        StartCoroutine(enemyScript.AttackCorutine(whatAttack));
+        yield return new WaitForSeconds(enemyScript.attackDurations[whatAttack]+5);
         enemyAttacking = false;
+        StartTurn();
         yield return null;
     }
 
+    public void PlayerDealsDamage(float modifier)
+    {
+        enemyScript.hitPoints -= Mathf.RoundToInt(playerScript.baseDamage * modifier);
+    }
 
+    public void StartTurn() //starts the players turn, letting them make an action
+    {
+        playerScript.movementEnabled = false;
+        buttonsInteractable = true;
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        for (int i = 0; i < bullets.Length - 1; i++)
+        {
+            Destroy(bullets[i]);
+        }
+    }
+
+    public IEnumerator EndTurn() //ends the players turn after they perform an action and starts the enemy's attack
+    {
+        playerScript.movementEnabled = true;
+        buttonsInteractable = false;
+        Debug.Log("what");
+        StartCoroutine(EnemyAttackHandler());
+        yield return null;
+    }
 
     void WinCombat()
     {

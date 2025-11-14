@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+        StartCoroutine(StartCombat()); //temporary to test combat
     }
 
     // Update is called once per frame
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartCombat()
     {
-        playerScript.EnterCombat();
+        StartCoroutine(playerScript.EnterCombat());
         yield return null;
     }
 
@@ -46,22 +47,26 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator FadeInCoroutine()
     {
+        myImage.gameObject.SetActive(true);
+
         Color startColor = new Color(myImage.color.r, myImage.color.g, myImage.color.b, 1);
         Color targetColor = new Color(myImage.color.r, myImage.color.g, myImage.color.b, 0);
 
         yield return FadeCoroutine(startColor, targetColor);
 
-        gameObject.SetActive(false);
+        myImage.gameObject.SetActive(false);
     }
 
     public IEnumerator FadeOutCoroutine()
     {
+        myImage.gameObject.SetActive(true);
+
         Color startColor = new Color(myImage.color.r, myImage.color.g, myImage.color.b, 0);
         Color targetColor = new Color(myImage.color.r, myImage.color.g, myImage.color.b, 1);
 
         yield return FadeCoroutine(startColor, targetColor);
 
-        gameObject.SetActive(false);
+        myImage.gameObject.SetActive(false);
     }
 
     private IEnumerator FadeCoroutine(Color startColor, Color targetColor)

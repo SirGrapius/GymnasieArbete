@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3891538272973098430}
   - component: {fileID: 4542791273470830490}
+  - component: {fileID: 7423885199282420236}
   m_Layer: 5
   m_Name: BasicAttackMinigame
   m_TagString: Untagged
@@ -161,10 +162,33 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 3
   m_WholeNumbers: 0
-  m_Value: 2.15
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7423885199282420236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377037875035113101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1bf83fa44e7db43bfc39ccb42ebfe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackMinigames
+  combatCont: {fileID: 0}
+  playerScript: {fileID: 0}
+  attackMarker: {fileID: 7407499710860242276, guid: 9f94efb271b751947803d53ac78ab7f6, type: 3}
+  currentMarker: {fileID: 0}
+  startTime: 0
+  inputTime: 0
+  correctTime: 0
+  currentTime: 0
+  mySlider: {fileID: 4542791273470830490}
+  difference: 0
+  modifier: 0
 --- !u!1 &1007416437636743608
 GameObject:
   m_ObjectHideFlags: 0
