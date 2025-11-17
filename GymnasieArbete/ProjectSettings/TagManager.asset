@@ -11,6 +11,7 @@ TagManager:
   - RightSpawn
   - TextBox
   - Enemy
+  - HealthBar
   layers:
   - Default
   - TransparentFX

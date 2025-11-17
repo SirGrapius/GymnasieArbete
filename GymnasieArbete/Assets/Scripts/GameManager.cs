@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] PlayerMovement playerScript;
     [SerializeField] TextBoxHandler dialogueScript;
-    [SerializeField] GameObject arena;
+    [SerializeField] public GameObject arena;
 
     [Header("Fade Settings")]
     [SerializeField] public float fadeDuration;

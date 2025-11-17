@@ -18,6 +18,7 @@ public class AttackMinigames : MonoBehaviour
     [SerializeField] float modifier;
 
     [SerializeField] bool antiBulletHell = false;
+    [SerializeField] bool antiInfDamageHell = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,15 +36,17 @@ public class AttackMinigames : MonoBehaviour
             mySlider.value += Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && mySlider.value <= mySlider.maxValue)
+        if (Input.GetKeyDown(KeyCode.Z) && mySlider.value <= mySlider.maxValue && antiInfDamageHell)
         {
             inputTime = startTime - currentTime;
             mySlider.value = mySlider.maxValue;
+            antiInfDamageHell = false;
             StartCoroutine(MinigameOver());
         }
-        else if (mySlider.value == mySlider.maxValue)
+        else if (mySlider.value == mySlider.maxValue && antiInfDamageHell)
         {
             inputTime = 100;
+            antiInfDamageHell = false;
             StartCoroutine(MinigameOver());
         }
     }
@@ -51,7 +54,7 @@ public class AttackMinigames : MonoBehaviour
     IEnumerator MinigameOver()
     {
         difference = Mathf.Abs(correctTime - inputTime);
-        modifier = difference * playerScript.damageModifier;
+        modifier = (difference) * playerScript.damageModifier;
         Destroy(currentMarker);
         combatCont.PlayerDealsDamage(modifier);
         if (antiBulletHell == false)

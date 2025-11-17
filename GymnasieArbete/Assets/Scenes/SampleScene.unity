@@ -1212,12 +1212,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 23cd93c2bd24c3545ae3282710969eed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1232,8 +1232,8 @@ Transform:
   m_GameObject: {fileID: 571474875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.95, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 3.68, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1251,13 +1251,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHandler
   attackSpawnTransforms: []
-  enemyName: 
+  enemyName: Mr. Peeks
   sprites: []
   projectiles:
-  - {fileID: 2396486639052352157, guid: d10e94e66357a894c8e9c428a883425f, type: 3}
+  - {fileID: 2871003487462215917, guid: 1ff464d0d7bdbc741891d32ea9b9e47b, type: 3}
+  - {fileID: 5194309790636920841, guid: a49816515e8fc6344b9638f70eb16010, type: 3}
   attackDurations:
   - 6
-  projectileAmountPerAttack: 0a000000
+  - 6
+  projectileAmountPerAttack: 0a00000003000000
   minAttack: 0
   maxAttack: 0
   spawnFields:
@@ -1334,7 +1336,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1353,7 +1355,7 @@ Transform:
   m_GameObject: {fileID: 602814368}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.83, z: 0}
+  m_LocalPosition: {x: 0, y: -2.8, z: 0}
   m_LocalScale: {x: 6.994063, y: 0.87, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1664,7 +1666,7 @@ GameObject:
   - component: {fileID: 620675037}
   m_Layer: 5
   m_Name: HealthBar
-  m_TagString: Untagged
+  m_TagString: HealthBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2231,7 +2233,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2250,7 +2252,7 @@ Transform:
   m_GameObject: {fileID: 818275803}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.38, z: 0}
+  m_LocalPosition: {x: 0, y: 2.4, z: 0}
   m_LocalScale: {x: 6.994063, y: 0.87, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2533,7 +2535,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2552,7 +2554,7 @@ Transform:
   m_GameObject: {fileID: 910891501}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.95, y: -0.14999986, z: 0}
+  m_LocalPosition: {x: -4, y: -0.14999986, z: 0}
   m_LocalScale: {x: 1, y: 4.654935, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2957,7 +2959,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2976,7 +2978,7 @@ Transform:
   m_GameObject: {fileID: 1321242237}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.99, y: -0.14999986, z: 0}
+  m_LocalPosition: {x: 4, y: -0.14999986, z: 0}
   m_LocalScale: {x: 1, y: 4.654935, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4106,9 +4108,17 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+      propertyPath: maxHitPoints
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
       propertyPath: spriteObject
       value: 
       objectReference: {fileID: 424330109}
+    - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+      propertyPath: damageModifier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
       propertyPath: sprites.Array.size
       value: 2

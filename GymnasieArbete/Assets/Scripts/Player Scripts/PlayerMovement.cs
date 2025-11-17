@@ -159,18 +159,16 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator EnterCombat()
     {
-        Debug.Log("combat starting");
         originalPosition = this.transform.position; //saves position
         StartCoroutine(gameManager.FadeOutCoroutine());
         yield return new WaitForSeconds(gameManager.fadeDuration);
-        spriteRenderer.sprite = sprites[1];
-        this.baseCollider.size = new Vector2(0.5f, 0.5f);
+        spriteRenderer.sprite = sprites[1]; //changes the player's sprite to the combat sprite
+        this.baseCollider.size = new Vector2(0.5f, 0.5f); //changes the size of the player's collider
         StartCoroutine(gameManager.FadeInCoroutine());
         yield return new WaitForSeconds(gameManager.fadeDuration);
         this.transform.position = arena.transform.position; //teleports player to arena
-        cameraFollow.inCombat = true;
-        combatManager.StartCombat();
-        Debug.Log("combat started");
+        cameraFollow.inCombat = true; //stops the camera from following the player
+        combatManager.StartCombat(); //activates the combat controller
         yield return null;
     }
 
