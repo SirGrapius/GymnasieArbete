@@ -8,6 +8,7 @@ public class CombatController : MonoBehaviour
 {
     [SerializeField] bool enemyAttacking;
     [SerializeField] bool textOnScreen;
+    [SerializeField] public bool combatOnGoing;
     [SerializeField] GameManager gameManager;
 
     [Header("Text Stuff")]
@@ -38,6 +39,7 @@ public class CombatController : MonoBehaviour
     [Header("Enemy Stuff")]
     [SerializeField] EnemyHandler enemyScript;
     [SerializeField] float mercyValue;
+    [SerializeField] TextMeshProUGUI damageText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -48,6 +50,7 @@ public class CombatController : MonoBehaviour
         dialogueScript.npcName = enemyScript.gameObject.name;
         healthText = healthBar.GetComponentInChildren<TextMeshProUGUI>();
         healthBar.maxValue = playerScript.maxHitPoints;
+        damageText.color = new Color(1, 1, 1, 0);
     }
 
     // Update is called once per frame
@@ -72,12 +75,12 @@ public class CombatController : MonoBehaviour
             buttons[0 & 1 & 2 & 3].interactable = true;
         }
 
-        if (enemyScript.hitPoints <= 0)
+        if (enemyScript.hitPoints <= 0 && combatOnGoing)
         {
             WinCombat();
             return;
         }
-        if (playerScript.hitPoints <= 0)
+        if (playerScript.hitPoints <= 0 && combatOnGoing)
         {
             LoseCombat();
             return;
@@ -167,20 +170,24 @@ public class CombatController : MonoBehaviour
         yield return null;
     }
 
-    public void PlayerDealsDamage(float modifier)
+    public IEnumerator PlayerDealsDamage(float modifier)
     {
         Debug.Log(modifier.ToString());
         int damage = Mathf.RoundToInt(playerScript.baseDamage * modifier);
         enemyScript.hitPoints -= damage;
-        Debug.Log("damage:"+damage.ToString());
+        damageText.color = new Color(1, 1, 1, 1);
+        damageText.text = damage.ToString() + "Damage!";
+        yield return new WaitForSeconds(2);
+        damageText.color = new Color(1,1,1,0);
+        yield return null;
     }
 
     public void StartTurn() //starts the players turn, letting them make an action
     {
         playerScript.movementEnabled = false;
         buttonsInteractable = true;
+        Rigidbody2D playerRB = playerScript.gameObject.GetComponent<Rigidbody2D>();
         playerScript.gameObject.transform.position = gameManager.arena.transform.position;
-        playerScript.gameObject.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0,0);
         GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
         for (int i = 0; i < bullets.Length - 1; i++)
         {
@@ -192,12 +199,14 @@ public class CombatController : MonoBehaviour
     {
         playerScript.movementEnabled = true;
         buttonsInteractable = false;
+        playerScript.gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
         StartCoroutine(EnemyAttackHandler());
         yield return null;
     }
 
     void WinCombat()
     {
+        combatOnGoing = false;
         Debug.Log("stand proud, you were strong");
         playerScript.experience += enemyScript.experienceReward;
         StartCoroutine(playerScript.LeaveCombat());
@@ -205,6 +214,7 @@ public class CombatController : MonoBehaviour
 
     void LoseCombat()
     {
+        combatOnGoing = false;
         Debug.Log("you suck!");
         gameManager.PlayerIsDead();
         StartCoroutine(playerScript.LeaveCombat());

@@ -294,6 +294,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e258e3afd4ba26428b683734885e123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatController
+--- !u!1 &791857435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8991596433622073194, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+  m_PrefabInstance: {fileID: 1330118764}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &791857438 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4117226394897889014, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+  m_PrefabInstance: {fileID: 1330118764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &802708832
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,9 +501,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 1330118767}
+    - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+      propertyPath: spriteObject
+      value: 
+      objectReference: {fileID: 791857435}
+    - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
       propertyPath: dialogueScript
       value: 
       objectReference: {fileID: 54956966}
+    - target: {fileID: 2216899401914846924, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 791857438}
     - target: {fileID: 6436237920058868657, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
       propertyPath: m_Name
       value: Player
@@ -518,6 +540,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9be832ccbc688734f9d796714903d1be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+--- !u!50 &1330118767 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 1797533932503410687, guid: cab1c710d5915a641aff4aa3be3f3797, type: 3}
+  m_PrefabInstance: {fileID: 1330118764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1647076057
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,12 +845,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCScript
   dialogues:
-  - fuck off
-  - kys
-  - SLAG!!!
-  actResponse: []
-  flavorText: 
+  - Holy fuck
+  - This place sucks so bad
+  - I want to KILL MYSELF
+  flavorText: []
   npcFaceSprite: {fileID: 0}
+  actFlavourTexts: []
+  actResponse: []
+  acts: []
 --- !u!1 &1835549816
 GameObject:
   m_ObjectHideFlags: 0

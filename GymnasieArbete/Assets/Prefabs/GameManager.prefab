@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1461636679639341409}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65,6 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatController
   enemyAttacking: 0
   textOnScreen: 0
+  combatOnGoing: 0
   gameManager: {fileID: 0}
   textBox: {fileID: 0}
   currentTextBox: {fileID: 0}
@@ -74,6 +75,12 @@ MonoBehaviour:
   buttons: []
   buttonsInteractable: 0
   confirmScreen: {fileID: 0}
+  healthBar: {fileID: 0}
+  healthText: {fileID: 0}
+  minigameSpawn: {fileID: 0}
+  minigameObject: {fileID: 0}
+  marker: {fileID: 0}
+  minigameSlider: {fileID: 0}
   enemyScript: {fileID: 0}
-  enemyHP: 0
   mercyValue: 0
+  damageText: {fileID: 0}

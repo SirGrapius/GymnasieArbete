@@ -69,7 +69,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (movementEnabled)
         {
+            currentSpeed = baseSpeed;
             playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
+        else
+        {
+            currentSpeed = 0;
         }
 
         if (playerInput.x != 0) //moves the player horizontally
@@ -110,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocityY = rb.linearVelocityY * Time.deltaTime / Mathf.Sqrt(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !sprinting || Input.GetKeyDown(KeyCode.RightShift) && !sprinting)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !sprinting && !combatManager.combatOnGoing || Input.GetKeyDown(KeyCode.RightShift) && !sprinting && !combatManager.combatOnGoing)
         {
             sprinting = true;
         }
@@ -122,10 +127,6 @@ public class PlayerMovement : MonoBehaviour
         if (sprinting)
         {
             currentSpeed = baseSpeed * 1.5f;
-        }
-        else
-        {
-            currentSpeed = baseSpeed;
         }
     }
     private void FixedUpdate()
@@ -150,9 +151,11 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator GetHit(int damageTaken, float iFrameDuration)
     {
+        spriteRenderer.color = Color.black;
         hitPoints -= damageTaken;
         hasiFrames = true;
         yield return new WaitForSeconds(iFrameDuration);
+        spriteRenderer.color = Color.white;
         hasiFrames = false;
         yield return null;
     }

@@ -56,7 +56,7 @@ public class AttackMinigames : MonoBehaviour
         difference = Mathf.Abs(correctTime - inputTime);
         modifier = (difference) * playerScript.damageModifier;
         Destroy(currentMarker);
-        combatCont.PlayerDealsDamage(modifier);
+        StartCoroutine(combatCont.PlayerDealsDamage(modifier));
         if (antiBulletHell == false)
         {
             StartCoroutine(combatCont.EndTurn());

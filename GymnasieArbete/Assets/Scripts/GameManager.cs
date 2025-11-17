@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-        StartCoroutine(StartCombat()); //temporary to test combat
+        
     }
 
     // Update is called once per frame

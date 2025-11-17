@@ -47,6 +47,11 @@ public class TextBoxHandler : MonoBehaviour
             {
                 StartCoroutine(EndDialogue(currentTextBox));
             }
+
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                StartCoroutine(EndDialogue(currentTextBox));
+            }
         }
     }
 
