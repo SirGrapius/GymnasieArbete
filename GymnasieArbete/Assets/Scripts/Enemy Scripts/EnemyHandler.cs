@@ -76,12 +76,16 @@ public class EnemyHandler : MonoBehaviour
                     {
                         currentBullet.gameObject.transform.position = new Vector3(-2, -0.2f, 0);
                         currentBullet.gameObject.transform.localScale = new Vector3(5, 4, 0);
+                        BoxCollider2D attackCollider = currentBullet.GetComponent<BoxCollider2D>();
+                        attackCollider.size = new Vector2(0.65f, 1);
                         currentBullet.spriteRenderer.sprite = currentBullet.sprites[0];
                     }
                     if (spawnLane == 3)//if right
                     {
                         currentBullet.gameObject.transform.position = new Vector3(2,-0.2f,0);
                         currentBullet.gameObject.transform.localScale = new Vector3(5,4,0);
+                        BoxCollider2D attackCollider = currentBullet.GetComponent<BoxCollider2D>();
+                        attackCollider.size = new Vector2(0.65f, 1);
                         currentBullet.spriteRenderer.sprite = currentBullet.sprites[0];
                     }
                 }

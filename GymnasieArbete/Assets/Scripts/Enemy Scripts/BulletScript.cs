@@ -4,7 +4,7 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour
 {
     [SerializeField] Rigidbody2D myRigidBody;
-    [SerializeField] public Collider2D myCollider;
+    [SerializeField] public BoxCollider2D myCollider;
     [SerializeField] Transform playerTransform;
     [SerializeField] public SpriteRenderer spriteRenderer;
 
@@ -32,7 +32,7 @@ public class BulletScript : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        myCollider = GetComponent<Collider2D>();
+        myCollider = GetComponent<BoxCollider2D>();
         myRigidBody = GetComponent<Rigidbody2D>();
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerTransform = player.GetComponent<Transform>();

@@ -172,7 +172,6 @@ public class CombatController : MonoBehaviour
 
     public IEnumerator PlayerDealsDamage(float modifier)
     {
-        Debug.Log(modifier.ToString());
         int damage = Mathf.RoundToInt(playerScript.baseDamage * modifier);
         enemyScript.hitPoints -= damage;
         damageText.color = new Color(1, 1, 1, 1);
@@ -207,7 +206,6 @@ public class CombatController : MonoBehaviour
     void WinCombat()
     {
         combatOnGoing = false;
-        Debug.Log("stand proud, you were strong");
         playerScript.experience += enemyScript.experienceReward;
         StartCoroutine(playerScript.LeaveCombat());
     }
@@ -215,7 +213,6 @@ public class CombatController : MonoBehaviour
     void LoseCombat()
     {
         combatOnGoing = false;
-        Debug.Log("you suck!");
         gameManager.PlayerIsDead();
         StartCoroutine(playerScript.LeaveCombat());
     }
